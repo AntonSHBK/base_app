@@ -1,0 +1,26 @@
+name: app_container
+
+services:
+  translate-service:
+    container_name: app_container
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../:/app/
+    env_file:
+      - .env
+    command: >
+      uvicorn app.main:app 
+      --host 0.0.0.0 
+      --port 8000
+      --reload
+    tty: true
+    networks:
+      - app_container_network
+
+networks:
+  app_container_network:
+    driver: bridge
